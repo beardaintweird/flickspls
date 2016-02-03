@@ -19,9 +19,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.errorLabel.hidden = true
         self.tableView.hidden = true
-        
+        self.errorLabel.hidden = true
+//        self.title = "babyFlicks"
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl)
@@ -55,6 +55,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                     }
                 } else {
                     self.errorLabel.hidden = false
+                    self.tableView.reloadData()
                 }
             })
 
@@ -113,45 +114,52 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let movie = movies![indexPath.row]
         let title = movie["title"] as! String
         let overview = movie["overview"] as! String
-        let posterPath = movie["poster_path"] as! String
-        
         let baseUrl = "http://image.tmdb.org/t/p/w500"
-        
+
+        if let posterPath = movie["poster_path"] as? String {
         let imageUrl = NSURL(string: baseUrl + posterPath)
-        
-        
+        cell.posterView.setImageWithURL(imageUrl!)
+        }
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
-        cell.posterView.setImageWithURL(imageUrl!)
+        
         
         print("row \(indexPath.row)")
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCollCell", forIndexPath: indexPath) as! MovieCollCell
-        
-        let movie = movies![indexPath.row]
-        let flowPosterPath = movie["poster_path"] as! String
-        
-        let baseUrl = "http://image.tmdb.org/t/p/w500"
-        
-        let imageUrl = NSURL(string: baseUrl + flowPosterPath)
-        
-        cell.flowPosterView.setImageWithURL(imageUrl!)
-        print("row \(indexPath.row)")
-        return cell
-    }
+//    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCollCell", forIndexPath: indexPath) as! MovieCollCell
+//        
+//        let movie = movies![indexPath.row]
+//        let flowPosterPath = movie["poster_path"] as! String
+//        
+//        let baseUrl = "http://image.tmdb.org/t/p/w500"
+//        
+//        let imageUrl = NSURL(string: baseUrl + flowPosterPath)
+//        
+//        cell.flowPosterView.setImageWithURL(imageUrl!)
+//        print("row \(indexPath.row)")
+//        return cell
+//    }
 
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPathForCell(cell)
+        let movie = movies![indexPath!.row]
+        
+        let detailViewController = segue.destinationViewController as! DetailViewController
+        detailViewController.movie = movie
+        
+        
+        
+        print("prepare for segue caled")
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
-    */
 
 }
