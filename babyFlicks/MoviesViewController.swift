@@ -19,7 +19,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.hidden = true
+        // set title for button switching back to collection view
+        let switchBackItem = UIBarButtonItem()
+        switchBackItem.title = "New School"
+        navigationItem.leftBarButtonItem = switchBackItem
         self.errorLabel.hidden = true
 //        self.title = "babyFlicks"
         let refreshControl = UIRefreshControl()
@@ -63,7 +66,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewDidAppear(animated: Bool) {
-        EZLoadingActivity.showWithDelay("Loading...", disableUI: true, seconds: 2)
+        EZLoadingActivity.showWithDelay("Loading...", disableUI: true, seconds: 0.25)
     }
     
     // creating the refresh control actions
@@ -143,11 +146,18 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 //        return cell
 //    }
 
+    
 
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // changing name of button for moving back to the movies collection
+        let backItem = UIBarButtonItem()
+        backItem.title = "Movies Collection"
+        navigationItem.backBarButtonItem = backItem
+        
+        // getting the proper data into the new view controller
         let cell = sender as! UITableViewCell
         let indexPath = tableView.indexPathForCell(cell)
         let movie = movies![indexPath!.row]

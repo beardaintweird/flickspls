@@ -11,5 +11,9 @@ import UIKit
 class MovieCollCell: UICollectionViewCell {
     
     @IBOutlet weak var flowPosterView: UIImageView!
-        
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+
 }
